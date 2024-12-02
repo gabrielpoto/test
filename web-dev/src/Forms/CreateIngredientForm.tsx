@@ -60,14 +60,13 @@ export function CreateIngredientForm(): JSX.Element {
                   displayEmpty
                   renderValue={(selected) => (
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        {selected}
-                        <TagChip tag={selected as IngredientTagType} />
+                        {selected} <TagChip tag={selected as IngredientTagType} />
                       </Box>
                   )}
               >
-                <MenuItem value="légumes">légumes<TagChip tag="vegetable" /></MenuItem>
-                <MenuItem value="protéine">protéine<TagChip tag="protein" /></MenuItem>
-                <MenuItem value="féculent">féculent<TagChip tag="starchy" /></MenuItem>
+                <MenuItem value="vegetable">Vegetable <TagChip tag="vegetable" /></MenuItem>
+                <MenuItem value="protein">Protein <TagChip tag="protein" /></MenuItem>
+                <MenuItem value="starchy">Starchy <TagChip tag="starchy" /></MenuItem>
               </Select>
             </FormControl>
 

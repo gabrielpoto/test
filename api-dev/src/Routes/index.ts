@@ -17,7 +17,7 @@ recipeRouter.delete("/delete/:id", RecipeController.delete);
 const ingredientRouter = Router();
 ingredientRouter.get("/list", IngredientController.list);
 ingredientRouter.post("/create", IngredientController.create);
-ingredientRouter.put("/update", IngredientController.update);
+ingredientRouter.patch("/update", IngredientController.update);
 ingredientRouter.delete("/delete/:id", IngredientController.delete);
 
 // SHOPPING LIST
