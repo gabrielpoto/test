@@ -9,5 +9,8 @@ export class Ingredient {
   name: string;
 
   @Column()
+  tag: string;
+
+  @Column()
   price: number;
 }
