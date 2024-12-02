@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, TextField, Select,MenuItem} from "@mui/material";
+import {Box, Button, FormControl, TextField, Select, MenuItem, InputLabel} from "@mui/material";
 import { useState } from "react";
 import { CardCustom } from "../Components/CardCustom";
 import { useMutationIngredientCreate } from "../Hooks/Mutation/IngredientsMutation";
@@ -54,8 +54,10 @@ export function CreateIngredientForm(): JSX.Element {
             </FormControl>
 
             <FormControl fullWidth margin="normal">
+              <InputLabel>Tag type</InputLabel>
               <Select
                   value={tag}
+                  label="Tag type"
                   onChange={(e) => setTag(e.target.value as IngredientTagType)}
                   displayEmpty
                   renderValue={(selected) => (

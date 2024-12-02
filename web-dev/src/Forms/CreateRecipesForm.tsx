@@ -6,19 +6,9 @@ import { useMutationRecipeCreate } from "../Hooks/Mutation/RecipeMutation";
 import { useQueryIngredientList } from "../Hooks/Query/IngredientQuery";
 import { ErrorPage } from "../Pages/ErrorPage";
 import { Ingredient } from "../Types/Ingredient";
-import {IngredientTagType, OptionsMultiSelectType} from "../Types/OptionsMultiSelect";
+import {OptionsMultiSelectType} from "../Types/OptionsMultiSelect";
 import { TagChip } from "../Components/TagChip";
 
-
-interface RecipeIngredient {
-  id: number;
-  label: string;
-  tag: IngredientTagType;
-}
-
-interface ValidationError {
-  message: string;
-}
 
 export function CreateRecipesForm(): JSX.Element {
   const [name, setName] = useState("");
@@ -33,13 +23,13 @@ export function CreateRecipesForm(): JSX.Element {
   const validateRecipeRules = useMemo(() => {
     if (!ingredients) return [];
 
-    const selectedWithTags = selectedIngredients.map((si: OptionsMultiSelectType) => ({
-      ...si,
-      tag: ingredients.find((i: Ingredient) => i.id === si.id)?.tag
+    const selectedWithTags = selectedIngredients.map((item: OptionsMultiSelectType) => ({
+      ...item,
+      tag: ingredients.find((i: Ingredient) => i.id === item.id)?.tag
     }));
 
-    const proteins = selectedWithTags.filter((i: RecipeIngredient) => i.tag === 'protein');
-    const starchy = selectedWithTags.filter((i: RecipeIngredient) => i.tag === 'starchy');
+    const proteins = selectedWithTags.filter((i: OptionsMultiSelectType) => i.tag === 'protein');
+    const starchy = selectedWithTags.filter((i: OptionsMultiSelectType) => i.tag === 'starchy');
     const errors: string[] = [];
 
     if (proteins.length > 1) {
