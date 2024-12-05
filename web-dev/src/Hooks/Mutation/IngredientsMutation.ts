@@ -69,6 +69,9 @@ export const useMutationIngredientUpdateTag = () => {
         {
             onSuccess: () => {
                 clientQuery.invalidateQueries(Requests.listIngredient);
+            },
+            onError: () => {
+                clientQuery.invalidateQueries(Requests.listIngredient);
             }
         }
     );

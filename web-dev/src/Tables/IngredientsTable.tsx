@@ -5,23 +5,21 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import {Box, Button, MenuItem, Select,Alert} from "@mui/material";
-import {Ingredient, IngredientTagType} from "../Types/Ingredient";
+import { Box, Button, Alert, Chip, Stack } from "@mui/material";
+import { Ingredient, IngredientTagType } from "../Types/Ingredient";
 import {useMutationIngredientDelete, useMutationIngredientUpdateTag} from "../Hooks/Mutation/IngredientsMutation";
 import {useState} from "react";
 
-export function IngredientTable({
-  ingredients,
-}: {
-  ingredients: Ingredient[];
-}): JSX.Element {
+const TAG_OPTIONS = [
+  { value: 'vegetable', label: 'Vegetable', color: 'success' },
+  { value: 'protein', label: 'Protein', color: 'primary' },
+  { value: 'starchy', label: 'Starchy', color: 'warning' }
+] as const;
+
+export function IngredientTable({ ingredients }: { ingredients: Ingredient[] }): JSX.Element {
   const { mutateAsync: deleteIngredient } = useMutationIngredientDelete();
   const { mutateAsync: updateIngredientTag } = useMutationIngredientUpdateTag();
   const [error, setError] = useState<string | null>(null);
-
-  const handlerButtonDelete = async (ingredient: Ingredient) => {
-    await deleteIngredient(ingredient.id);
-  };
 
   const handleTagUpdate = async (ingredient: Ingredient, newTag: IngredientTagType) => {
     try {
@@ -34,53 +32,55 @@ export function IngredientTable({
   };
 
   return (
-    <Box className="tableContainer">
-      {error && (
-          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
-            {error}
-          </Alert>
-      )}
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>My ingredients</TableCell>
-              <TableCell align="right">Price</TableCell>
-              <TableCell align="right">Tag</TableCell>
-              <TableCell align="right">Delete</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {ingredients.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.price} €</TableCell>
-                <TableCell align="right">
-                  <Select
-                      value={row.tag}
-                      onChange={(e) => handleTagUpdate(row, e.target.value as IngredientTagType)}
-                      size="small"
-                  >
-                    <MenuItem value="vegetable">Vegetable</MenuItem>
-                    <MenuItem value="protein">Protein</MenuItem>
-                    <MenuItem value="starchy">Starchy</MenuItem>
-                  </Select>
-                </TableCell>
-                <TableCell align="right">
-                  <Button onClick={() => handlerButtonDelete(row)}>
-                    DELETE
-                  </Button>
-                </TableCell>
+      <Box className="tableContainer">
+        {error && (
+            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+              {error}
+            </Alert>
+        )}
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 650 }} aria-label="ingredients table">
+            <TableHead>
+              <TableRow>
+                <TableCell>My ingredients</TableCell>
+                <TableCell align="right">Price</TableCell>
+                <TableCell align="right">Tag</TableCell>
+                <TableCell align="right">Delete</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </Box>
+            </TableHead>
+            <TableBody>
+              {ingredients.map((row) => (
+                  <TableRow key={row.name}>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell align="right">{row.price} €</TableCell>
+                    <TableCell align="right">
+                      <Stack direction="row" spacing={1} justifyContent="flex-end">
+                        {TAG_OPTIONS.map((option) => (
+                            <Chip
+                                key={option.value}
+                                label={option.label}
+                                color={option.value === row.tag ? option.color : 'default'}
+                                variant={option.value === row.tag ? 'filled' : 'outlined'}
+                                onClick={() => handleTagUpdate(row, option.value)}
+                                sx={{ cursor: 'pointer' }}
+                            />
+                        ))}
+                      </Stack>
+                    </TableCell>
+                    <TableCell align="right">
+                      <Button
+                          onClick={() => deleteIngredient(row.id)}
+                          color="error"
+                          variant="outlined"
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
   );
 }
